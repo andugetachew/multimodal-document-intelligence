@@ -34,6 +34,28 @@ def extract_ocr(state: DocumentState) -> DocumentState:
         "confidence": confidence,
         "page_images": page_images,
     }
+def extract_docx(state: DocumentState) -> DocumentState:
+    from app.services.extraction.docx_extractor import extract_docx_text
+
+    text = extract_docx_text(state["file_path"])
+    return {
+        **state,
+        "extracted_text": text,
+        "extraction_method": "docx",
+        "confidence": 1.0,
+    }
+
+
+def extract_csv(state: DocumentState) -> DocumentState:
+    from app.services.extraction.csv_extractor import extract_csv_text
+
+    text = extract_csv_text(state["file_path"])
+    return {
+        **state,
+        "extracted_text": text,
+        "extraction_method": "csv",
+        "confidence": 1.0,
+    }
 
 
 def extract_vision(state: DocumentState) -> DocumentState:
@@ -56,13 +78,15 @@ def should_escalate_to_vision(state: DocumentState) -> str:
         return "extract_vision"
     return "done"
 
-
 def route_by_type(state: DocumentState) -> str:
-    """Conditional edge: pick the first extraction path based on document type."""
     match state["file_type"]:
         case "native_pdf":
             return "extract_native"
         case "scanned_pdf" | "image":
             return "extract_ocr"
+        case "docx":
+            return "extract_docx"
+        case "csv":
+            return "extract_csv"
         case _:
-            return "extract_vision"  # unknown type -> safest fallback
+            return "extract_vision"

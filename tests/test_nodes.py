@@ -38,3 +38,12 @@ def test_confidence_exactly_at_threshold_does_not_escalate():
     threshold = get_settings().OCR_CONFIDENCE_THRESHOLD
     state = {"confidence": threshold}
     assert nodes.should_escalate_to_vision(state) == "done"
+
+def test_route_docx_goes_to_docx_extraction():
+    state = {"file_type": "docx"}
+    assert nodes.route_by_type(state) == "extract_docx"
+
+
+def test_route_csv_goes_to_csv_extraction():
+    state = {"file_type": "csv"}
+    assert nodes.route_by_type(state) == "extract_csv"

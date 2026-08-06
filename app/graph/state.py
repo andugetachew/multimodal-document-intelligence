@@ -3,7 +3,7 @@ from typing import TypedDict, Optional, Literal
 
 class DocumentState(TypedDict, total=False):
     file_path: str
-    file_type: Literal["native_pdf", "scanned_pdf", "image", "unknown"]
+    file_type: Literal["native_pdf", "scanned_pdf", "image", "docx", "csv", "unknown"]
 
     extracted_text: str
     extraction_method: Literal["native", "ocr", "vision", "none"]

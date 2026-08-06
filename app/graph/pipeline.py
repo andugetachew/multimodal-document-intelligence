@@ -10,6 +10,8 @@ def build_pipeline():
     graph.add_node("extract_native", nodes.extract_native)
     graph.add_node("extract_ocr", nodes.extract_ocr)
     graph.add_node("extract_vision", nodes.extract_vision)
+    graph.add_node("extract_docx", nodes.extract_docx)
+    graph.add_node("extract_csv", nodes.extract_csv)
 
     graph.set_entry_point("classify_document")
 
@@ -20,10 +22,14 @@ def build_pipeline():
             "extract_native": "extract_native",
             "extract_ocr": "extract_ocr",
             "extract_vision": "extract_vision",
+            "extract_docx": "extract_docx",
+            "extract_csv": "extract_csv",
         },
     )
 
     graph.add_edge("extract_native", END)
+    graph.add_edge("extract_docx", END)
+    graph.add_edge("extract_csv", END)
 
     graph.add_conditional_edges(
         "extract_ocr",

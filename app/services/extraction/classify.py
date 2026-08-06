@@ -1,9 +1,11 @@
 import os
-import fitz  # PyMuPDF
+import fitz
 
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".tiff", ".bmp"}
-MIN_CHARS_FOR_NATIVE = 50  # below this, treat as scanned/no text layer
+DOCX_EXTENSIONS = {".docx"}
+CSV_EXTENSIONS = {".csv"}
+MIN_CHARS_FOR_NATIVE = 50
 
 
 def detect_document_type(file_path: str) -> str:
@@ -11,6 +13,12 @@ def detect_document_type(file_path: str) -> str:
 
     if ext in IMAGE_EXTENSIONS:
         return "image"
+
+    if ext in DOCX_EXTENSIONS:
+        return "docx"
+
+    if ext in CSV_EXTENSIONS:
+        return "csv"
 
     if ext == ".pdf":
         return _classify_pdf(file_path)
@@ -25,7 +33,7 @@ def _classify_pdf(file_path: str) -> str:
         return "unknown"
 
     total_chars = 0
-    pages_checked = min(3, doc.page_count)  # sample first few pages, no need to scan all
+    pages_checked = min(3, doc.page_count)
 
     for i in range(pages_checked):
         total_chars += len(doc[i].get_text().strip())
