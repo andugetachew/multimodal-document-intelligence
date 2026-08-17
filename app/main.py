@@ -1,3 +1,6 @@
+import sys
+print("STARTUP: main.py is loading", file=sys.stderr, flush=True)
+
 from fastapi import FastAPI
 
 from app.api.documents import router as documents_router
