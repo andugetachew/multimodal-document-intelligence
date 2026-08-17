@@ -2,8 +2,8 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# System deps: tesseract for pytesseract, poppler for pdf2image,
-# libpq/gcc for psycopg2-binary and other C-extension wheels
+ENV PYTHONUNBUFFERED=1
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     tesseract-ocr \
     poppler-utils \
